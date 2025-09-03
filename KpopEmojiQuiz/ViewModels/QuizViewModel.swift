@@ -5,11 +5,16 @@ class QuizViewModel: ObservableObject {
     @Published var currentIndex: Int = 0
     @Published var score: Int = 0
     @Published var userAnswer: String = ""
-    @Published var isFinished: Bool = false
+    @Published var showResult: Bool = false
+    @Published var isCorrect: Bool? = nil
 
     var currentQuiz: Quiz? {
         guard currentIndex < quizzes.count else { return nil }
         return quizzes[currentIndex]
+    }
+
+    var isLastQuiz: Bool {
+        return currentIndex == quizzes.count - 1
     }
 
     init() {
@@ -29,27 +34,29 @@ class QuizViewModel: ObservableObject {
 
         if userAnswer.trimmingCharacters(in: .whitespacesAndNewlines) == quiz.answer {
             score += 1
+            isCorrect = true
+        } else {
+            isCorrect = false
         }
-
-        nextQuiz()
+        showResult = true
     }
-
-    func reset() {
-        currentIndex = 0
-        score = 0
-        userAnswer = ""
-        isFinished = false
-    }
-}
-
-private extension QuizViewModel {
 
     func nextQuiz() {
         if currentIndex + 1 < quizzes.count {
             currentIndex += 1
             userAnswer = ""
+            isCorrect = nil
+            showResult = false
         } else {
-            isFinished = true
+            // 게임 끝
         }
+    }
+
+    func restartQuiz() {
+        currentIndex = 0
+        score = 0
+        userAnswer = ""
+        isCorrect = nil
+        showResult = false
     }
 }
