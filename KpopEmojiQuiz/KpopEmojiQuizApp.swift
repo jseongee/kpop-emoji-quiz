@@ -4,7 +4,7 @@ import SwiftUI
 struct KpopEmojiQuizApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            QuizView()
         }
     }
 }
